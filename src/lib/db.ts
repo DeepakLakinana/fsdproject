@@ -3,12 +3,18 @@ import path from 'path'
 import fs from 'fs'
 import crypto from 'crypto'
 
-const dataDir = path.join(process.cwd(), 'data')
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir, { recursive: true })
-}
-
-const dbPath = path.join(dataDir, 'app.db')
+// In serverless environments like Vercel, the root filesystem is read-only.
+// Use '/tmp/app.db' if process.env.VERCEL is present, otherwise use local 'data/app.db'
+const isVercel = Boolean(process.env.VERCEL)
+const dbPath = isVercel
+  ? path.join('/tmp', 'app.db')
+  : (() => {
+      const dataDir = path.join(process.cwd(), 'data')
+      if (!fs.existsSync(dataDir)) {
+        fs.mkdirSync(dataDir, { recursive: true })
+      }
+      return path.join(dataDir, 'app.db')
+    })()
 
 declare global {
   // eslint-disable-next-line no-var
