@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-// Only home page ('/'), login ('/login'), static assets, and api routes are public
-export function middleware(request: NextRequest) {
+// In Next.js 16, proxy replaces the legacy middleware convention
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   const userCookie = request.cookies.get('sahara_user')?.value
 
