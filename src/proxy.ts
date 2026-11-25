@@ -6,12 +6,7 @@ export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   const userCookie = request.cookies.get('sahara_user')?.value
 
-  // If user is already logged in and navigates to /login, redirect to /community
-  if (userCookie && pathname === '/login') {
-    return NextResponse.redirect(new URL('/community', request.url))
-  }
-
-  // If user is not logged in and tries to access protected pages (community, support, resources, about)
+  // If user is not logged in and tries to access protected pages (community, support, resources, about, admin)
   const isPublicPage = pathname === '/' || pathname === '/login'
   const isInternalPath =
     pathname.startsWith('/_next') ||
