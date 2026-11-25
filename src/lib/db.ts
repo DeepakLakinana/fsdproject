@@ -28,8 +28,11 @@ function getDatabase(): DatabaseSync {
 
   const db = new DatabaseSync(dbPath)
 
-  // Initialize schema if not exists
+  // Optimize SQLite performance for serverless & local speeds
   db.exec(`
+    PRAGMA journal_mode = WAL;
+    PRAGMA synchronous = NORMAL;
+
     CREATE TABLE IF NOT EXISTS posts (
       id TEXT PRIMARY KEY,
       title TEXT NOT NULL,
